@@ -1,0 +1,50 @@
+Maxwell Boo
+mboo@ucsc.edu
+
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+ <meta charset="utf-8" />
+ <title>Draw a blue rectangle (canvas version)</title>
+ </head>
+
+ <body onload="main()">
+ <canvas id="example" width="400" height="400">
+ Please use a browser that supports "canvas"
+ </canvas>
+ <script src="asg0.js"></script>
+ <script src="lib/cuon_matrix.js"></script>
+ </body>
+ </html>
+
+ <label for="X">V1: X</label>
+    <input type="number" id="X" name="X" max="10" min ="-10" step="1" value="0">
+ <label for="Y">Y</label>
+    <input type="number" id="Y" name="Y" max="10" min ="-10" step="1" value="0">
+
+<label for="X2">V2: X</label>
+    <input type="number" id="X2" name="X2" max="10" min ="-10" step="1" value="0">
+ <label for="Y2">Y</label>
+    <input type="number" id="Y2" name="Y2" max="10" min ="-10" step="1" value="0">
+
+<input type="button" id="Draw" name="Draw" value="Draw" onclick="handleDrawEvent()">
+
+<label for="operation">Operation:</label>
+    <select id="operation" name="operation">
+        <option value="add">Add</option>
+        <option value="sub">Subtract</option>
+        <option value="mul">Multiply</option>
+        <option value="div">Divide</option>
+        <option value="angleBetween">Angle Between</option>
+        <option value="cross">Cross Product</option>
+        <option value="magnitude">Magnitude</option>
+        <option value="normalize">Normalize</option>
+        <option value="area">Area</option>
+    </select>
+
+    </select>
+    
+<label for="Scalar">Scalar:</label>
+    <input type="number" id="Scalar" name="Scalar" max="10" min ="-10" step="1" value="1">
+    <input type="button" id="Draw" name="Draw" value="Draw" onclick="handleDrawOperationEvent()">
+
