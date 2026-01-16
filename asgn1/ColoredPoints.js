@@ -330,3 +330,4 @@ function drawDuck() {
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // reset clear color to black
 }
+
