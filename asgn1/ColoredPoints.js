@@ -27,6 +27,7 @@ let u_Size;
 
 let g_selectedColor = [1.0, 0.0, 0.0, 1.0];
 let g_SelectedSize = 5.0;
+let g_SelectedAlpha = 1.0; // 🔹 NEW: Alpha transparency
 
 const POINT = 0;
 const TRIANGLE = 1;
@@ -51,6 +52,9 @@ function setUpWebGL() {
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
+  
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 }
 
 function connectFunctionsToGLSL() {
@@ -91,7 +95,6 @@ function addActionsforHtmlUI() {
     g_selectedColor = [1.0, 0.0, 0.0, 1.0];
   };
 
-  // 🔹 Clear EVERYTHING (duck + shapes)
   document.getElementById('clearButton').onclick = function () {
     g_shapesList = [];
     g_showDuck = false;
@@ -99,11 +102,10 @@ function addActionsforHtmlUI() {
     gl.clear(gl.COLOR_BUFFER_BIT);
   };
 
-  // 🔹 Clear everything and show only the duck
   document.getElementById('drawDuck').onclick = function () {
-    g_shapesList = []; // Clear all user shapes
+    g_shapesList = []; 
     g_showDuck = true;
-    renderAllShapes(); // This will show only the duck
+    renderAllShapes(); 
   };
 
   document.getElementById('pointButton').onclick = function () {
@@ -137,6 +139,11 @@ function addActionsforHtmlUI() {
   document.getElementById('segmentsSlider').addEventListener('mouseup', function () {
     g_SelectedSegments = this.value;
   });
+  
+  // 🔹 Alpha slider for transparency
+  document.getElementById('alphaSlider').addEventListener('mouseup', function () {
+    g_SelectedAlpha = this.value / 100;
+  });
 }
 
 function main() {
@@ -146,6 +153,7 @@ function main() {
 
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = click;
+  
   canvas.onmousemove = function (ev) {
     if (ev.buttons == 1) click(ev);
   };
@@ -159,6 +167,7 @@ function main() {
 
 function click(ev) {
   let [x, y] = convertCoordinatesEventToGL(ev);
+  
   let shape;
 
   if (g_SelectedType == POINT) {
@@ -172,6 +181,7 @@ function click(ev) {
 
   shape.position = [x, y];
   shape.color = g_selectedColor.slice();
+  shape.color[3] = g_SelectedAlpha; 
   shape.size = g_SelectedSize;
 
   g_shapesList.push(shape);
@@ -196,7 +206,6 @@ function renderAllShapes() {
   // Clear once at the start
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  // 🔹 Draw duck first if enabled (it will be behind user shapes)
   if (g_showDuck) {
     drawDuck();
   }
@@ -240,7 +249,7 @@ function drawTriangle(vertices) {
 }
 
 function drawDuck() {
-  // 🔹 REMOVED gl.clear() - clearing happens in renderAllShapes()
+  
   gl.clearColor(0.5, 0.8, 1.0, 1.0); // light blue background
   gl.clear(gl.COLOR_BUFFER_BIT); // Clear with duck background color
   
@@ -330,4 +339,3 @@ function drawDuck() {
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // reset clear color to black
 }
-
