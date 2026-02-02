@@ -144,10 +144,22 @@ function main() {
 
 var g_startTime = performance.now()/1000.0;
 var g_seconds = performance.now()/1000.0 - g_startTime;
+let g_lastFrameTime = performance.now();
+let g_frameCount = 0;
+let g_fps = 0;
+let g_fpsStartTime = performance.now();
 
 function tick() {
-  g_seconds = performance.now()/1000.0 - g_startTime;
-  
+  g_frameCount++;
+  const now = performance.now();
+
+  if (now - g_fpsStartTime >= 1000) {
+    g_fps = g_frameCount;
+    g_frameCount = 0;
+    g_fpsStartTime = now;
+  }
+
+  g_seconds = now / 1000.0 - g_startTime;
   updateAnimationAngles();
   renderAllShapes();
 
@@ -399,13 +411,10 @@ function renderAllShapes() {
   tail.matrix.scale(0.2, 0.2, 0.4);
   tail.render();
 
-  var duration = performance.now() - startTime;
   sendTextToHTML(
-    "numdot: " + len +
-    " ms: " + Math.floor(duration) +
-    " fps: " + Math.floor(10000 / duration) / 10,
-    "numdot"
-  );
+  "fps: " + g_fps.toFixed(1),
+  "numdot"
+);
 }
 
 function sendTextToHTML(text, htmlID) {
